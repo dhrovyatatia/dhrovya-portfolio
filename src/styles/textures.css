@@ -1,0 +1,83 @@
+/* ──────────────────────────────────────────────────────────────
+   Procedural textures — all SVG filters rendered once as tiles.
+   No raster assets needed.
+   ────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Fine monochrome grain (alpha only) */
+  --tex-grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1.4 -0.45'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+
+  /* Paper fibres — fine, slightly directional tooth */
+  --tex-fibre: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='f' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.06 0.4' numOctaves='3' seed='7' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.4  0 0 0 0 0.34  0 0 0 0 0.2  0 0 0 0.5 -0.18'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>");
+
+  /* Large, very soft cloudiness of handmade paper */
+  --tex-mottle: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1000' height='1000'><filter id='m' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='0.005' numOctaves='3' seed='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.43  0 0 0 0 0.26  0 0 0 0.32 -0.1'/></filter><rect width='100%' height='100%' filter='url(%23m)'/></svg>");
+}
+
+/* Global fine-noise overlay (sits above everything, never intercepts) */
+.grain-overlay {
+  position: fixed;
+  inset: -50%;
+  z-index: 90;
+  pointer-events: none;
+  background-image: var(--tex-grain);
+  background-size: 220px;
+  opacity: 0.07;
+}
+
+/* Ivory paper surface */
+.paper {
+  background-color: var(--color-ivory);
+  background-image: var(--tex-fibre), var(--tex-mottle),
+    radial-gradient(130% 100% at 50% 40%, transparent 60%, rgba(120, 100, 60, 0.09) 100%);
+  background-size: 400px, 1000px, 100% 100%;
+  color: var(--color-ink);
+}
+
+.paper-warm {
+  background-color: var(--color-paper);
+  background-image: var(--tex-fibre), var(--tex-mottle),
+    radial-gradient(130% 100% at 50% 40%, transparent 55%, rgba(110, 90, 50, 0.12) 100%);
+  background-size: 400px, 1000px, 100% 100%;
+  color: var(--color-ink);
+}
+
+/* Paper grain on top of paper (finer) */
+.paper-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: var(--tex-grain);
+  background-size: 180px;
+  opacity: 0.1;
+  mix-blend-mode: multiply;
+  border-radius: inherit;
+}
+
+/* Ruled notebook lines */
+.ruled {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 31px,
+    rgba(71, 123, 80, 0.16) 31px,
+    rgba(71, 123, 80, 0.16) 32px
+  );
+}
+
+/* Graph-paper grid for the lab */
+.graph {
+  background-image: linear-gradient(rgba(145, 198, 90, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(145, 198, 90, 0.07) 1px, transparent 1px),
+    linear-gradient(rgba(145, 198, 90, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(145, 198, 90, 0.035) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+}
+
+/* CSS fallback if WebGL is unavailable */
+.water-fallback {
+  background: radial-gradient(70% 55% at 30% 30%, rgba(71, 123, 80, 0.35), transparent 70%),
+    radial-gradient(60% 50% at 75% 70%, rgba(23, 78, 61, 0.9), transparent 70%),
+    linear-gradient(170deg, #103f32 0%, #092f25 45%, #071d17 100%);
+}

@@ -1,0 +1,127 @@
+/* ──────────────────────────────────────────────────────────────
+   A paper page floating on the pond.
+   ────────────────────────────────────────────────────────────── */
+
+.journal-page {
+  position: relative;
+  margin-inline: clamp(10px, 2.6vw, 44px);
+  border-radius: 3px;
+  isolation: isolate;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.35) inset,
+    0 0 0 1px rgba(7, 29, 23, 0.06),
+    0 30px 60px -20px rgba(2, 12, 9, 0.55),
+    0 80px 140px -40px rgba(2, 12, 9, 0.6);
+  transform-origin: 50% 0%;
+}
+
+/* Edges of pages stacked underneath — gives the page thickness */
+.journal-page.stacked::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: -5px;
+  height: 12px;
+  z-index: -1;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(to bottom, #d9d1bb, #cfc6ad);
+  box-shadow:
+    0 3px 0 -1px #e2dac5,
+    0 6px 0 -2px #d4cbb3,
+    0 9px 14px -4px rgba(0, 0, 0, 0.45);
+}
+
+/* Faint margin rule + gutter shadow, like a bound page */
+.page-margin {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, rgba(60, 45, 20, 0.1), transparent 3%),
+    linear-gradient(270deg, rgba(60, 45, 20, 0.06), transparent 2%);
+}
+
+.page-folio {
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(7, 29, 23, 0.55);
+}
+
+/* The journal's back cover, holding the last page */
+.cover-board {
+  position: relative;
+  border-radius: 6px 6px 0 0;
+  background-color: var(--color-forest);
+  background-image: var(--tex-grain),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.018) 0 2px, transparent 2px 5px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.05) 0 2px, transparent 2px 5px),
+    radial-gradient(80% 50% at 50% 100%, rgba(71, 123, 80, 0.18), transparent 70%);
+  background-size: 160px, auto, auto, auto;
+  box-shadow: inset 0 0 0 1px rgba(145, 198, 90, 0.08), inset 0 0 60px rgba(0, 0, 0, 0.35),
+    0 -30px 80px -30px rgba(0, 0, 0, 0.6);
+}
+
+/* Experience timeline: the entry being read lights its node */
+.xp-row.is-current .xp-dot,
+.xp-row:hover .xp-dot {
+  border-color: var(--color-lime);
+}
+.xp-row.is-current .xp-dot > span,
+.xp-row:hover .xp-dot > span {
+  background: var(--color-lime);
+}
+.xp-dot::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid var(--color-lime);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.6s, transform 0.8s var(--ease-soft);
+}
+.xp-row.is-current .xp-dot::after,
+.xp-row:hover .xp-dot::after {
+  opacity: 0.45;
+  transform: scale(1);
+}
+
+/* Dark lab sheet */
+.lab-sheet {
+  background-color: var(--color-ink);
+  color: var(--color-ivory);
+  box-shadow:
+    0 0 0 1px rgba(145, 198, 90, 0.08),
+    0 40px 100px -30px rgba(0, 0, 0, 0.8);
+}
+
+/* Taped photo corner */
+.tape {
+  position: absolute;
+  width: 70px;
+  height: 20px;
+  background: rgba(232, 225, 207, 0.62);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(1px);
+  z-index: 3;
+}
+.tape::before,
+.tape::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: inherit;
+  mask: radial-gradient(circle at 50% 50%, #000 1.2px, transparent 1.4px) 0 0 / 4px 4px;
+}
+.tape::before {
+  left: -3px;
+}
+.tape::after {
+  right: -3px;
+}

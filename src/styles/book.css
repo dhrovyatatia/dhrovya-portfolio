@@ -1,0 +1,275 @@
+/* ──────────────────────────────────────────────────────────────
+   The 3D journal (CSS 3D, driven by GSAP)
+   Geometry: two pages side by side, spine at 50%.
+   ────────────────────────────────────────────────────────────── */
+
+.book-stage {
+  --pw: min(468px, 37vw, calc((100svh - 260px) * 0.72));
+  --ph: calc(var(--pw) / 0.72);
+  --bm: calc(var(--pw) * 0.032); /* board overhang */
+  --edge-l: 2px;
+  --edge-r: 6px;
+  perspective: 2400px;
+  perspective-origin: 50% 30%;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: calc(var(--ph) + var(--bm) * 2 + 40px);
+}
+
+.book-float,
+.book,
+.leaf {
+  transform-style: preserve-3d;
+}
+
+.book-float {
+  position: relative;
+}
+
+.book {
+  position: relative;
+  width: calc(var(--pw) * 2);
+  height: var(--ph);
+}
+
+/* Shadows cast on the surrounding paper */
+.book-shadow {
+  position: absolute;
+  top: calc(var(--bm) * -1);
+  bottom: calc(var(--bm) * -1);
+  width: calc(50% + var(--bm));
+  background: rgba(38, 30, 12, 0.55);
+  filter: blur(26px);
+  transform: translateZ(-4px) translate3d(14px, 26px, 0);
+  border-radius: 6px;
+  pointer-events: none;
+}
+.book-shadow.right {
+  left: 50%;
+}
+.book-shadow.left {
+  right: 50%;
+}
+
+/* Cover boards */
+.board {
+  position: absolute;
+  top: calc(var(--bm) * -1);
+  height: calc(100% + var(--bm) * 2);
+  width: calc(50% + var(--bm));
+  border-radius: 2px 5px 5px 2px;
+  background-color: var(--color-forest);
+  background-image: var(--tex-grain),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.018) 0 2px, transparent 2px 5px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.05) 0 2px, transparent 2px 5px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.35), transparent 8%, transparent 92%, rgba(255, 255, 255, 0.04));
+  background-size: 160px, auto, auto, auto;
+  box-shadow: inset 0 0 0 1px rgba(145, 198, 90, 0.08), inset 0 0 30px rgba(0, 0, 0, 0.35);
+}
+.board-right {
+  left: 50%;
+  transform: translateZ(-1px);
+}
+
+/* Static page blocks */
+.page-base {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+}
+.base-left {
+  left: 0;
+  transform: translateZ(0px);
+}
+.base-right {
+  left: 50%;
+  transform: translateZ(0px);
+}
+
+/* Visible page-edge thickness on the outer side + bottom */
+.base-right::after,
+.base-left::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  bottom: -2px;
+  width: var(--edge-r);
+  right: calc(var(--edge-r) * -1);
+  background: repeating-linear-gradient(90deg, #efe9d8 0 1px, #cfc6ad 1px 2px);
+  border-radius: 0 2px 2px 0;
+  box-shadow: 1px 0 2px rgba(0, 0, 0, 0.25);
+}
+.base-left::after {
+  width: var(--edge-l);
+  right: auto;
+  left: calc(var(--edge-l) * -1);
+  border-radius: 2px 0 0 2px;
+  box-shadow: -1px 0 2px rgba(0, 0, 0, 0.25);
+}
+.base-right::before,
+.base-left::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  bottom: calc(var(--edge-r) * -0.55);
+  height: calc(var(--edge-r) * 0.55);
+  background: repeating-linear-gradient(180deg, #efe9d8 0 1px, #cfc6ad 1px 2px);
+}
+.base-left::before {
+  bottom: calc(var(--edge-l) * -0.55);
+  height: calc(var(--edge-l) * 0.55);
+}
+
+/* Turning leaves */
+.leaf {
+  will-change: transform;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  transform-origin: 0% 50%;
+  --shade: 0;
+}
+.leaf.cover {
+  top: calc(var(--bm) * -1);
+  height: calc(100% + var(--bm) * 2);
+  width: calc(50% + var(--bm));
+}
+
+.face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+.face.back {
+  transform: rotateY(180deg);
+}
+/* Light falls off as a page lifts */
+.face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--shade);
+  background: linear-gradient(90deg, rgba(7, 29, 23, 0.32), rgba(7, 29, 23, 0.06) 45%, rgba(255, 255, 255, 0.05) 80%, rgba(7, 29, 23, 0.12));
+}
+.face.back::after {
+  background: linear-gradient(270deg, rgba(7, 29, 23, 0.32), rgba(7, 29, 23, 0.06) 45%, rgba(255, 255, 255, 0.05) 80%, rgba(7, 29, 23, 0.12));
+}
+
+/* ── Page surface */
+.jpage {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+  overflow: hidden;
+  color: var(--color-ink);
+  background-color: #f5f2e6;
+  background-image: var(--tex-fibre), var(--tex-mottle);
+  background-size: 400px, 1000px;
+}
+.jpage::before {
+  /* gutter shadow toward the spine */
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.jpage.is-right::before {
+  background: linear-gradient(90deg, rgba(60, 45, 20, 0.28), rgba(60, 45, 20, 0.08) 6%, transparent 14%),
+    linear-gradient(270deg, rgba(60, 45, 20, 0.06), transparent 4%);
+}
+.jpage.is-left::before {
+  background: linear-gradient(270deg, rgba(60, 45, 20, 0.3), rgba(60, 45, 20, 0.08) 6%, transparent 14%),
+    linear-gradient(90deg, rgba(60, 45, 20, 0.06), transparent 4%);
+}
+
+.jpage .cq-meta {
+  font-family: var(--font-sans);
+  font-size: max(7.5px, 1.85cqw);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.jpage .cq-body {
+  font-size: max(10px, 3.05cqw);
+  line-height: 1.6;
+}
+
+/* ── Cover */
+.cover-front {
+  background-color: var(--color-forest);
+  background-image: var(--tex-grain),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0 2px, transparent 2px 5px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.06) 0 2px, transparent 2px 5px),
+    radial-gradient(90% 70% at 40% 30%, rgba(71, 123, 80, 0.28), transparent 70%);
+  background-size: 160px, auto, auto, auto;
+  color: var(--color-ivory);
+  container-type: size;
+  border-radius: 2px 6px 6px 2px;
+  box-shadow: inset 0 0 0 1px rgba(145, 198, 90, 0.1), inset 0 0 40px rgba(0, 0, 0, 0.4);
+}
+.cover-front::before {
+  /* hinge */
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 7%;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.1) 60%, rgba(255, 255, 255, 0.05) 85%, rgba(0, 0, 0, 0.2));
+}
+.cq-meta-cover {
+  font-family: var(--font-sans);
+  font-size: max(7px, 1.9cqw);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.emboss {
+  color: #e9e4d2;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.55), 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.cover-back {
+  background-color: var(--color-forest);
+  background-image: var(--tex-grain);
+  background-size: 160px;
+  border-radius: 6px 2px 2px 6px;
+}
+
+/* Art inside a spread */
+.spread-art {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.spread-art > * {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Mobile single-page journal */
+.mj-stage {
+  perspective: 1600px;
+}
+.mj-page {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0% 50%;
+  backface-visibility: hidden;
+  border-radius: 2px 6px 6px 2px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset, 0 30px 50px -25px rgba(38, 30, 12, 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book-shadow {
+    filter: blur(18px);
+  }
+}

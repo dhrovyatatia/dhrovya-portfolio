@@ -1,0 +1,284 @@
+/* ──────────────────────────────────────────────────────────────
+   Chapter 04 — Beyond the classroom: a thread of margin notes
+   ────────────────────────────────────────────────────────────── */
+.xp {
+  position: relative;
+  z-index: 4;
+  padding: 6vh var(--gutter) 16vh;
+}
+
+/* a soft shade on the water so the writing reads */
+.xp__shade {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+  background: linear-gradient(180deg, transparent, rgba(7, 29, 23, 0.55) 12%, rgba(7, 29, 23, 0.55) 88%, transparent);
+}
+
+/* Header */
+.xp__header {
+  margin-inline: auto;
+  display: grid;
+  max-width: 1320px;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: end;
+  gap: 2rem;
+}
+.xp__kicker {
+  color: var(--sage);
+}
+.xp__title {
+  margin-top: 1.25rem;
+  font-size: clamp(56px, 8.4vw, 176px);
+  color: var(--ivory);
+}
+.xp__intro-text {
+  font-size: clamp(20px, 1.8vw, 26px);
+  line-height: 1.375;
+  color: var(--sage);
+}
+.xp__sprig {
+  margin-top: 1.5rem;
+  width: 4rem;
+  height: 2rem;
+  color: var(--botanical);
+}
+
+/* Timeline */
+.xp__body {
+  position: relative;
+  margin: clamp(56px, 8vw, 120px) auto 0;
+  max-width: 1320px;
+}
+
+.xp__mark {
+  padding-left: 2rem;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--botanical);
+}
+.xp__mark--start {
+  margin-bottom: 0.75rem;
+}
+.xp__mark--end {
+  margin-top: 1.25rem;
+}
+
+.xp__list {
+  position: relative;
+}
+
+/* the thread, and the part of it that has been "read" */
+.xp__thread {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 7px;
+  width: 1px;
+  background: rgb(var(--botanical-rgb) / 0.3);
+}
+.xp__thread-fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: top;
+  background: rgb(var(--sage-rgb) / 0.7);
+}
+
+/* One entry */
+.xp__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  column-gap: 1.25rem;
+  border-bottom: 1px solid rgb(var(--ivory-rgb) / 0.08);
+  padding-block: 2.25rem;
+  transition: color 0.7s, background-color 0.7s, border-color 0.7s;
+}
+
+/* a quiet wash behind the row being hovered */
+.xp__wash {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1rem;
+  right: -1rem;
+  z-index: -10;
+  border-radius: 2px;
+  background: rgb(var(--ivory-rgb) / 0.025);
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.xp__row:hover .xp__wash {
+  opacity: 1;
+}
+
+/* date column (sits above the title on small screens) */
+.xp__when {
+  grid-column-start: 2;
+  grid-row-start: 1;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+.xp__date {
+  font-size: clamp(22px, 2vw, 30px);
+  line-height: 1.05;
+  color: rgb(var(--ivory-rgb) / 0.85);
+}
+.xp__tag {
+  color: rgb(var(--sage-rgb) / 0.7);
+}
+
+/* the node on the thread */
+.xp__node {
+  grid-column-start: 1;
+  grid-row: 1 / span 3;
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+}
+.xp__dot {
+  position: relative;
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 999px;
+  border: 1px solid var(--botanical);
+  background: var(--ink);
+  transition: border-color 0.5s, background-color 0.5s;
+}
+.xp__dot > span {
+  position: absolute;
+  inset: 3px;
+  border-radius: 999px;
+  background: var(--botanical);
+  transition: background-color 0.5s;
+}
+.xp__dot::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid var(--lime);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.6s, transform 0.8s var(--ease-soft);
+}
+/* the entry being read (or hovered) lights its node */
+.xp__row.is-current .xp__dot,
+.xp__row:hover .xp__dot {
+  border-color: var(--lime);
+}
+.xp__row.is-current .xp__dot > span,
+.xp__row:hover .xp__dot > span {
+  background: var(--lime);
+}
+.xp__row.is-current .xp__dot::after,
+.xp__row:hover .xp__dot::after {
+  opacity: 0.45;
+  transform: scale(1);
+}
+
+.xp__content {
+  grid-column-start: 2;
+}
+.xp__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.xp__role {
+  max-width: 20ch;
+  text-wrap: balance;
+  font-size: clamp(27px, 3.6vw, 54px);
+  text-transform: uppercase;
+  color: var(--ivory);
+  transition: letter-spacing 0.7s var(--ease-soft);
+}
+.xp__row:hover .xp__role {
+  letter-spacing: 0.01em;
+}
+.xp__no {
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+  rotate: -4deg;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--botanical);
+}
+.xp__org {
+  margin-top: 0.5rem;
+  font-size: clamp(19px, 1.9vw, 26px);
+  line-height: 1.375;
+  color: var(--sage);
+}
+.xp__points {
+  margin-top: 1.25rem;
+  max-width: 68ch;
+}
+.xp__point {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 15.5px;
+  line-height: 1.625;
+  color: rgb(var(--ivory-rgb) / 0.75);
+}
+.xp__point:not(:last-child) {
+  margin-bottom: 0.625rem;
+}
+.xp__bullet {
+  margin-top: 0.8em;
+  width: 0.75rem;
+  height: 1px;
+  flex-shrink: 0;
+  background: rgb(var(--lime-rgb) / 0.6);
+}
+
+@media (min-width: 768px) {
+  .xp__mark {
+    padding-left: calc(220px + 48px);
+  }
+  .xp__thread {
+    left: calc(220px + 19px);
+  }
+  .xp__row {
+    grid-template-columns: 220px 40px 1fr;
+    column-gap: 0;
+    padding-block: 3rem;
+  }
+  .xp__when {
+    grid-column-start: 1;
+    margin-bottom: 0;
+    display: block;
+    padding-right: 1.5rem;
+    padding-top: 0.5rem;
+  }
+  .xp__tag {
+    margin-top: 0.5rem;
+  }
+  .xp__node {
+    grid-column-start: 2;
+    padding-top: 1rem;
+  }
+  .xp__content {
+    grid-column-start: 3;
+    padding-left: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .xp__header {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .xp__heading {
+    grid-column: span 8 / span 8;
+  }
+  .xp__intro {
+    grid-column: span 4 / span 4;
+    padding-bottom: 1rem;
+  }
+}

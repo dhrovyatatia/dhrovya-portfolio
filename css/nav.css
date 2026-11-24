@@ -1,0 +1,523 @@
+/* ──────────────────────────────────────────────────────────────
+   Navigation — fixed header, liquid-glass tabs, full-page menu.
+   State lives in attributes set by js/nav.js:
+     .site-header[data-theme="dark|light"]  what is beneath the bar
+     .site-header[data-scrim]               scrolled past the opening
+     .site-header[data-open]                the menu is open
+   ────────────────────────────────────────────────────────────── */
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  background: var(--ivory);
+  padding: 0.5rem 1rem;
+  color: var(--ink);
+}
+
+/* ── header bar ── */
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 80;
+  display: flex;
+  height: var(--nav-h);
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--gutter);
+  color: var(--ivory);
+  transition: color 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* ink over paper pages, and over the open (paper) menu */
+.site-header[data-theme='light'],
+.site-header[data-open] {
+  color: var(--ink);
+}
+
+/* soft fade so content never collides with the bar */
+.site-header__scrim {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: -10;
+  height: calc(var(--nav-h) + 28px);
+  opacity: 0;
+  background: linear-gradient(to bottom, rgba(7, 29, 23, 0.88) 0%, rgba(7, 29, 23, 0.6) 55%, rgba(7, 29, 23, 0));
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.site-header[data-theme='light'] .site-header__scrim {
+  left: clamp(10px, 2.6vw, 44px);
+  right: clamp(10px, 2.6vw, 44px);
+  background: linear-gradient(to bottom, rgba(243, 240, 227, 0.94) 0%, rgba(243, 240, 227, 0.75) 55%, rgba(243, 240, 227, 0));
+}
+.site-header[data-scrim]:not([data-open]) .site-header__scrim {
+  opacity: 1;
+}
+
+/* ── monogram ── */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.brand__mark {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  width: 70px;
+  height: 70px;
+  margin: -0.75rem 0;
+}
+.brand__tilt {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: rotate 0.7s var(--ease-soft), scale 0.7s var(--ease-soft);
+}
+.brand:hover .brand__tilt {
+  rotate: -6deg;
+  scale: 1.1;
+}
+.brand__logo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.brand__logo--light {
+  filter: drop-shadow(0 6px 10px rgba(2, 14, 10, 0.45));
+}
+.brand__logo--ink {
+  opacity: 0;
+}
+.site-header[data-theme='light']:not([data-open]) .brand__logo--light {
+  opacity: 0;
+}
+.site-header[data-theme='light']:not([data-open]) .brand__logo--ink {
+  opacity: 1;
+}
+.brand__text {
+  display: none;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.brand__edition {
+  opacity: 0.6;
+}
+
+/* ── centre: the glass track ── */
+.site-header__center {
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  display: none;
+}
+.glass-nav {
+  --tab-px: 10px;
+}
+
+/* ── right actions ── */
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+.icon-btn,
+.menu-btn {
+  height: 2.5rem;
+  border: 1px solid color-mix(in oklab, currentcolor 30%, transparent);
+  border-radius: 999px;
+}
+.icon-btn:hover,
+.menu-btn:hover {
+  border-color: currentcolor;
+}
+.icon-btn {
+  display: grid;
+  width: 2.5rem;
+  place-items: center;
+  transition: border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 0.75rem 0 1rem;
+  transition: border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* the two-line burger that crosses into an × */
+.menu-btn__icon {
+  position: relative;
+  display: block;
+  width: 1rem;
+  height: 0.625rem;
+}
+.menu-btn__bar {
+  position: absolute;
+  left: 0;
+  height: 1px;
+  background: currentcolor;
+}
+.menu-btn__bar--top {
+  top: 0;
+  width: 100%;
+  transition: translate 0.5s cubic-bezier(0.4, 0, 0.2, 1), rotate 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.menu-btn:hover .menu-btn__bar--top {
+  translate: 0.125rem 0;
+}
+.menu-btn__bar--bottom {
+  bottom: 0;
+  width: 66.666667%;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.menu-btn[aria-expanded='true'] .menu-btn__bar--top {
+  top: 50%;
+  rotate: 45deg;
+  translate: none;
+}
+.menu-btn[aria-expanded='true'] .menu-btn__bar--bottom {
+  top: 50%;
+  bottom: auto;
+  width: 100%;
+  rotate: -45deg;
+}
+
+/* ── full-page menu ── */
+.site-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: calc(var(--nav-h) + 4vh) var(--gutter) 2rem;
+  visibility: hidden;
+  clip-path: inset(0% 0% 100% 0%);
+}
+/* faint margin rule + gutter shadow, like a bound page */
+.site-menu__margin {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(60, 45, 20, 0.1), transparent 3%),
+    linear-gradient(270deg, rgba(60, 45, 20, 0.06), transparent 2%);
+}
+.site-menu__list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.site-menu__item {
+  overflow: hidden;
+  border-bottom: 1px solid rgb(var(--ink-rgb) / 0.1);
+}
+.site-menu__link {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.375rem 0;
+}
+.site-menu__num {
+  display: flex;
+  width: 2rem;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--botanical);
+}
+.site-menu__dot {
+  display: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lime);
+}
+.site-menu__link[aria-current] .site-menu__dot {
+  display: block;
+}
+.site-menu__label {
+  font-size: clamp(44px, 9.5vh, 110px);
+  color: var(--forest);
+  transition: letter-spacing 0.7s cubic-bezier(0.4, 0, 0.2, 1), color 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.site-menu__link:hover .site-menu__label {
+  letter-spacing: 0.02em;
+  color: var(--botanical);
+}
+.site-menu__hint {
+  display: none;
+  margin-left: auto;
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--botanical);
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.site-menu__link:hover .site-menu__hint {
+  opacity: 1;
+}
+.site-menu__footer {
+  position: relative;
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  color: var(--ink);
+}
+.site-menu__email {
+  font-size: 24px;
+  line-height: 32px;
+}
+.site-menu__socials {
+  display: flex;
+  gap: 1.5rem;
+}
+.site-menu__social {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  opacity: 0.7;
+}
+.site-menu__social:hover {
+  opacity: 1;
+}
+
+/* ── breakpoints ── */
+@media (min-width: 640px) {
+  .brand__mark {
+    width: 82px;
+    height: 82px;
+  }
+  .brand__text {
+    display: flex;
+  }
+  .site-menu__link {
+    gap: 2rem;
+  }
+  .site-menu__hint {
+    display: block;
+  }
+  .site-menu__email {
+    font-size: 30px;
+    line-height: 36px;
+  }
+}
+
+@media (min-width: 768px) {
+  .brand__text {
+    display: none;
+  }
+  .site-header__center {
+    display: block;
+  }
+}
+
+/* tablets: the glass track needs the room, so the menu button shrinks to its icon */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .menu-btn {
+    padding: 0 0.75rem;
+  }
+  .menu-btn__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .glass-nav {
+    --tab-px: 14px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .brand__text {
+    display: flex;
+  }
+  .glass-nav {
+    --tab-px: 17px;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Liquid-glass segmented navigation
+   One shared track · one independently animated capsule.
+   Two surfaces: over the pond (dark) and over a paper page (light).
+   ────────────────────────────────────────────────────────────── */
+
+.glass-track {
+  --track-bg: rgba(240, 244, 225, 0.055);
+  --track-border: rgba(239, 241, 221, 0.2);
+  --track-inner: inset 0 1px 0 rgba(255, 255, 240, 0.08), inset 0 -10px 22px rgba(3, 18, 13, 0.22);
+  --track-outer: 0 10px 30px -12px rgba(2, 14, 10, 0.55);
+  --pill-bg: linear-gradient(180deg, rgba(243, 245, 226, 0.22) 0%, rgba(237, 239, 220, 0.12) 55%, rgba(220, 232, 205, 0.14) 100%);
+  --pill-border: rgba(255, 255, 235, 0.42);
+  --pill-shadow:
+    inset 0 1px 0 rgba(255, 255, 245, 0.45),
+    inset 0 -1px 0 rgba(255, 255, 240, 0.08),
+    inset 0 -8px 14px -10px rgba(4, 22, 16, 0.5),
+    0 1px 1px rgba(2, 14, 10, 0.25),
+    0 8px 18px -8px rgba(2, 14, 10, 0.6);
+  --hover-bg: rgba(243, 240, 227, 0.07);
+  --label-idle: rgba(243, 240, 227, 0.62);
+  --label-hover: rgba(243, 240, 227, 0.92);
+  --label-active: #fbfaf2;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--track-bg);
+  border: 1px solid var(--track-border);
+  box-shadow: var(--track-inner), var(--track-outer);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
+  transition: background-color 0.7s var(--ease-soft), border-color 0.7s var(--ease-soft), box-shadow 0.7s var(--ease-soft);
+}
+
+/* a faint caustic line along the top edge of the track — light catching glass */
+.glass-track::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent 8%, rgba(255, 255, 240, 0.16) 30%, transparent 52%, rgba(255, 255, 240, 0.08) 78%, transparent 94%);
+  -webkit-mask: linear-gradient(#000 0 0) top / 100% 1px no-repeat;
+  mask: linear-gradient(#000 0 0) top / 100% 1px no-repeat;
+}
+
+.glass-track[data-surface='light'] {
+  --track-bg: rgba(9, 47, 37, 0.05);
+  --track-border: rgba(9, 47, 37, 0.16);
+  --track-inner: inset 0 1px 0 rgba(255, 255, 255, 0.55), inset 0 -8px 18px rgba(9, 47, 37, 0.05);
+  --track-outer: 0 10px 26px -14px rgba(9, 47, 37, 0.35);
+  --pill-bg: linear-gradient(180deg, rgba(255, 255, 250, 0.92) 0%, rgba(248, 246, 236, 0.78) 100%);
+  --pill-border: rgba(9, 47, 37, 0.14);
+  --pill-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -6px 12px -8px rgba(9, 47, 37, 0.18),
+    0 1px 1px rgba(9, 47, 37, 0.12),
+    0 8px 16px -8px rgba(9, 47, 37, 0.35);
+  --hover-bg: rgba(9, 47, 37, 0.06);
+  --label-idle: rgba(7, 29, 23, 0.58);
+  --label-hover: rgba(7, 29, 23, 0.88);
+  --label-active: #071d17;
+}
+
+/* ── the raised glass capsule ── */
+.glass-pill {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  width: 0;
+  border-radius: 999px;
+  background: var(--pill-bg);
+  border: 1px solid var(--pill-border);
+  box-shadow: var(--pill-shadow);
+  overflow: hidden;
+  pointer-events: none;
+  visibility: hidden; /* until the script has measured its tab */
+  will-change: transform, width;
+  transition: background 0.7s var(--ease-soft), border-color 0.7s var(--ease-soft), box-shadow 0.7s var(--ease-soft);
+}
+
+/* soft top-lit diffusion */
+.glass-pill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(120% 90% at 50% -20%, rgba(255, 255, 245, 0.28), transparent 60%);
+  opacity: 0.9;
+}
+.glass-track[data-surface='light'] .glass-pill::before {
+  background: radial-gradient(120% 90% at 50% -20%, rgba(255, 255, 255, 0.9), transparent 60%);
+}
+
+/* the travelling reflection */
+.glass-sheen {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 60%;
+  background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 245, 0.32) 48%, rgba(255, 255, 245, 0.08) 58%, transparent 75%);
+  transform: translateX(-130%) skewX(-12deg);
+  mix-blend-mode: soft-light;
+}
+.glass-track[data-surface='light'] .glass-sheen {
+  mix-blend-mode: normal;
+  background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.85) 48%, rgba(255, 255, 255, 0.2) 58%, transparent 75%);
+}
+
+/* ── labels ── */
+.glass-tab {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+  padding: 0 var(--tab-px, 16px);
+  border-radius: 999px;
+  color: var(--label-idle);
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.5s var(--ease-soft), transform 0.35s var(--ease-soft);
+  -webkit-tap-highlight-color: transparent;
+}
+.glass-tab::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--hover-bg);
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.45s var(--ease-soft), transform 0.45s var(--ease-soft);
+}
+.glass-tab:hover {
+  color: var(--label-hover);
+}
+.glass-tab:not([aria-current]):hover::before {
+  opacity: 1;
+  transform: scale(1);
+}
+.glass-tab[aria-current] {
+  color: var(--label-active);
+}
+.glass-tab[aria-current]:hover {
+  filter: brightness(1.08);
+}
+.glass-tab:active {
+  transform: scale(0.96);
+}
+.glass-tab:focus-visible {
+  outline-offset: 2px;
+  border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-sheen {
+    display: none;
+  }
+}

@@ -1,0 +1,25 @@
+/* ──────────────────────────────────────────────────────────────
+   Dhrovya Tatia — a personal journal.
+   Plain CSS, one file per chapter, loaded in page order.
+   ────────────────────────────────────────────────────────────── */
+
+/* Typefaces (Google Fonts, self-hosted as variable fonts) */
+@import '@fontsource-variable/noto-serif-display/wdth.css';
+@import '@fontsource-variable/cormorant-garamond/wght.css';
+@import '@fontsource-variable/cormorant-garamond/wght-italic.css';
+@import '@fontsource-variable/instrument-sans/wght.css';
+@import '@fontsource-variable/caveat/wght.css';
+@import 'lenis/dist/lenis.css';
+
+@import './base.css';
+@import './textures.css';
+@import './nav.css';
+@import './hero.css';
+@import './about.css';
+@import './journal.css';
+@import './book.css';
+@import './experience.css';
+@import './skills.css';
+@import './hobbies.css';
+@import './resume.css';
+@import './contact.css';

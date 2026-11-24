@@ -1,0 +1,327 @@
+/* ──────────────────────────────────────────────────────────────
+   Chapter 07 — The last page, resting on the journal's back cover,
+   and the footer (the cover itself).
+   ────────────────────────────────────────────────────────────── */
+
+.contact {
+  position: relative;
+  z-index: 5;
+}
+
+/* The journal's back cover: green cloth weave holding the last page */
+.contact__board {
+  position: relative;
+  margin-inline: clamp(6px, 1.4vw, 24px);
+  padding: clamp(6px, 1.6vw, 26px) clamp(6px, 1.6vw, 26px) 0;
+  border-radius: 6px 6px 0 0;
+  background-color: var(--forest);
+  background-image: var(--tex-grain),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.018) 0 2px, transparent 2px 5px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.05) 0 2px, transparent 2px 5px),
+    radial-gradient(80% 50% at 50% 100%, rgba(71, 123, 80, 0.18), transparent 70%);
+  background-size: 160px, auto, auto, auto;
+  box-shadow:
+    inset 0 0 0 1px rgba(145, 198, 90, 0.08),
+    inset 0 0 60px rgba(0, 0, 0, 0.35),
+    0 -30px 80px -30px rgba(0, 0, 0, 0.6);
+}
+
+/* The last paper page (ivory texture comes from .paper) */
+.contact__page {
+  position: relative;
+  isolation: isolate;
+  border-radius: 3px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.35) inset,
+    0 0 0 1px rgba(7, 29, 23, 0.06),
+    0 30px 60px -20px rgba(2, 12, 9, 0.55),
+    0 80px 140px -40px rgba(2, 12, 9, 0.6);
+  transform-origin: 50% 0%;
+}
+
+/* Edges of the pages stacked underneath — gives the journal thickness */
+.contact__page::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: -5px;
+  height: 12px;
+  z-index: -1;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(to bottom, #d9d1bb, #cfc6ad);
+  box-shadow:
+    0 3px 0 -1px #e2dac5,
+    0 6px 0 -2px #d4cbb3,
+    0 9px 14px -4px rgba(0, 0, 0, 0.45);
+}
+
+/* Faint margin rule + gutter shadow, like a bound page */
+.contact__margin {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, rgba(60, 45, 20, 0.1), transparent 3%),
+    linear-gradient(270deg, rgba(60, 45, 20, 0.06), transparent 2%);
+}
+
+.contact__inner {
+  position: relative;
+  padding: clamp(28px, 4vw, 56px) clamp(20px, 5.5vw, 96px) clamp(40px, 6vw, 90px);
+}
+
+.contact__title {
+  margin-top: clamp(48px, 7vw, 120px);
+  font-size: clamp(42px, 10.4vw, 200px);
+  color: var(--forest);
+}
+
+.contact__title-accent {
+  color: var(--botanical);
+}
+
+.contact__grid {
+  margin-top: clamp(48px, 6vw, 96px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 3.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.15);
+}
+
+.contact__lede {
+  max-width: 38ch;
+  font-size: clamp(21px, 1.9vw, 28px);
+  line-height: 1.375;
+  color: rgb(var(--ink-rgb) / 0.75);
+}
+
+/* Email + copy button */
+.contact__email-row {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 1.25rem;
+  row-gap: 0.75rem;
+}
+
+.contact__email {
+  font-size: clamp(26px, 3.2vw, 48px);
+  line-height: 1.25;
+  color: var(--forest);
+  word-break: break-all;
+}
+
+.contact__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgb(var(--ink-rgb) / 0.2);
+  border-radius: 999px;
+  color: rgb(var(--ink-rgb) / 0.7);
+  transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* the check icon replaces the copy icon once copied */
+.contact__copy-icon--check,
+.contact__copy.is-copied .contact__copy-icon--copy {
+  display: none;
+}
+.contact__copy.is-copied .contact__copy-icon--check {
+  display: block;
+}
+
+.contact__letter {
+  margin-top: 2.5rem;
+  color: var(--forest);
+}
+
+/* Elsewhere: social links */
+.contact__label {
+  color: var(--botanical);
+}
+
+.contact__socials {
+  margin-top: 1rem;
+}
+
+.contact__social {
+  border-bottom: 1px solid rgb(var(--ink-rgb) / 0.15);
+}
+
+.contact__social-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 1rem;
+}
+
+.contact__social-no {
+  width: 1.5rem;
+  color: rgb(var(--ink-rgb) / 0.45);
+}
+
+.contact__social-name {
+  font-size: clamp(24px, 2.2vw, 32px);
+  line-height: 1;
+  color: var(--ink);
+  transition: translate 0.5s var(--ease-soft);
+}
+
+.contact__social-arrow {
+  margin-left: auto;
+  color: var(--botanical);
+  transition: translate 0.5s var(--ease-soft);
+}
+
+.contact__place {
+  margin-top: 1.5rem;
+  color: rgb(var(--ink-rgb) / 0.5);
+}
+
+/* Sign-off */
+.contact__fin {
+  margin-top: clamp(56px, 8vw, 120px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.contact__lotus {
+  width: 5rem;
+  height: 6rem;
+  color: var(--botanical);
+}
+
+.contact__fin-text {
+  margin-top: 0.75rem;
+  font-size: 22px;
+  color: rgb(var(--ink-rgb) / 0.6);
+}
+
+.contact__signature {
+  margin-top: 0.5rem;
+  font-size: 44px;
+  line-height: 1;
+  color: var(--forest);
+}
+
+@media (hover: hover) {
+  .contact__copy:hover {
+    border-color: var(--forest);
+    color: var(--forest);
+  }
+  .contact__social-link:hover .contact__social-name {
+    translate: 0.5rem 0;
+  }
+  .contact__social-link:hover .contact__social-arrow {
+    translate: 0.125rem -0.125rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .contact__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .contact__main {
+    grid-column: span 7 / span 7;
+  }
+  .contact__elsewhere {
+    grid-column: 9 / span 4;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Footer — the back cover: embossed name and a quiet colophon
+   ────────────────────────────────────────────────────────────── */
+.footer {
+  position: relative;
+  overflow: hidden;
+  padding-top: 3.5rem;
+  color: var(--ivory);
+}
+
+.footer__bar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-inline: clamp(8px, 3vw, 48px);
+}
+
+.footer__colophon {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footer__logo {
+  width: 3.5rem;
+  height: 3.5rem;
+  object-fit: contain;
+  opacity: 0.9;
+}
+
+.footer__note {
+  color: var(--sage);
+}
+
+.footer__dot {
+  margin-inline: 0.5rem;
+  opacity: 0.4;
+}
+
+.footer__top {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--sage);
+  transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.footer__top-ring {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid color-mix(in oklab, currentColor 40%, transparent);
+  border-radius: 999px;
+  transition: translate 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* The name pressed into the cloth */
+.footer__name {
+  margin-top: 2rem;
+  margin-bottom: -0.12em;
+  font-size: clamp(40px, 16vw, 330px);
+  line-height: 0.72;
+  text-align: center;
+  white-space: nowrap;
+  color: #0c3529;
+  opacity: 0.9;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (hover: hover) {
+  .footer__top:hover {
+    color: var(--ivory);
+  }
+  .footer__top:hover .footer__top-ring {
+    translate: 0 -0.25rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .footer__bar {
+    flex-direction: row;
+    align-items: center;
+  }
+}

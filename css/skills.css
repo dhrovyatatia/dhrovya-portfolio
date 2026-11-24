@@ -1,0 +1,221 @@
+/* ──────────────────────────────────────────────────────────────
+   Chapter 05 — The learning curve, set like the index of a book
+   ────────────────────────────────────────────────────────────── */
+.skills {
+  position: relative;
+  z-index: 5;
+  padding-bottom: 14vh;
+}
+.skills__page {
+  overflow: hidden;
+}
+.skills__inner {
+  position: relative;
+  padding: clamp(28px, 4vw, 56px) clamp(20px, 5.5vw, 96px) 0;
+}
+
+/* Heading */
+.skills__head {
+  margin-top: clamp(40px, 6vw, 96px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: end;
+  gap: 2rem;
+}
+.skills__title {
+  font-size: clamp(70px, 11vw, 190px);
+  color: var(--forest);
+}
+.skills__intro {
+  font-size: clamp(19px, 1.7vw, 25px);
+  line-height: 1.375;
+  color: rgb(var(--ink-rgb) / 0.7);
+}
+
+/* Four columns: school, undergrad, qualification, programmes */
+.skills__grid {
+  margin-top: clamp(48px, 6vw, 96px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.2);
+}
+.skills__col {
+  position: relative;
+  border: 0 solid rgb(var(--ink-rgb) / 0.15);
+  padding-block: 2.5rem;
+}
+.skills__col + .skills__col {
+  border-top-width: 1px;
+}
+
+.skills__index {
+  display: block;
+  font-size: 64px;
+  line-height: 1;
+  color: var(--botanical);
+}
+.skills__col-title {
+  margin-top: 1.25rem;
+  font-size: clamp(26px, 2.1vw, 32px);
+  line-height: 0.94;
+  color: var(--forest);
+}
+.skills__note {
+  margin-top: 0.5rem;
+  rotate: -1deg;
+  font-size: 21px;
+  line-height: 1.25;
+  color: rgb(var(--botanical-rgb) / 0.9);
+}
+.skills__list {
+  margin-top: 1.25rem;
+}
+
+/* One entry — slides right on hover, with a lime dot and a leaf */
+.skills__item {
+  border-bottom: 1px dashed rgb(var(--ink-rgb) / 0.15);
+  padding-block: 1.25rem;
+}
+.skills__item:first-child {
+  padding-top: 0.25rem;
+}
+.skills__item-inner {
+  position: relative;
+  transition: translate 0.5s var(--ease-soft);
+}
+.skills__item:hover .skills__item-inner {
+  translate: 0.5rem 0;
+}
+.skills__dot {
+  position: absolute;
+  left: -1rem;
+  top: 0.6em;
+  width: 0.375rem;
+  height: 0.375rem;
+  scale: 0;
+  border-radius: 999px;
+  background: var(--lime);
+  transition: scale 0.5s var(--ease-soft);
+}
+.skills__item:hover .skills__dot {
+  scale: 1;
+}
+.skills__leaf {
+  position: absolute;
+  right: 0;
+  top: 0.25rem;
+  width: 1rem;
+  height: 1rem;
+  translate: -0.25rem 0;
+  color: var(--botanical);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.skills__item:hover .skills__leaf {
+  translate: 0 0;
+  opacity: 1;
+}
+
+.skills__entry-title {
+  padding-right: 1.5rem;
+  font-size: clamp(21px, 1.6vw, 25px);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.skills__entry-sub {
+  margin-top: 0.25rem;
+  font-size: clamp(18px, 1.35vw, 21px);
+  font-weight: 600;
+  line-height: 1.25;
+  color: rgb(var(--ink-rgb) / 0.8);
+}
+/* a line that starts with a score sets the number large */
+.skills__score {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.skills__score-num {
+  font-size: clamp(34px, 2.8vw, 44px);
+  line-height: 1;
+  color: var(--forest);
+}
+.skills__score-note {
+  color: rgb(var(--ink-rgb) / 0.55);
+}
+.skills__line {
+  margin-top: 0.375rem;
+  font-size: 15px;
+  line-height: 1.625;
+  color: rgb(var(--ink-rgb) / 0.75);
+}
+.skills__small {
+  margin-top: 0.625rem;
+  color: var(--botanical);
+}
+
+/* The outlined index line that slides with the scroll */
+.skills__ticker-wrap {
+  position: relative;
+  margin-top: 1.5rem;
+  overflow: hidden;
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.15);
+  padding-block: 1.5rem;
+}
+.skills__ticker {
+  white-space: nowrap;
+  font-size: clamp(64px, 9vw, 150px);
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(9, 47, 37, 0.45);
+}
+.skills__ticker-dot {
+  margin-inline: 0.25em;
+  -webkit-text-stroke: 0;
+  color: rgb(var(--botanical-rgb) / 0.6);
+}
+
+@media (min-width: 768px) {
+  .skills__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .skills__col {
+    padding-inline: 1.5rem;
+  }
+  .skills__col:first-child {
+    padding-left: 0;
+  }
+  .skills__col:nth-child(2) {
+    border-top-width: 0;
+  }
+  .skills__col:nth-child(even) {
+    border-left-width: 1px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .skills__head {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .skills__title {
+    grid-column: span 8 / span 8;
+  }
+  .skills__intro {
+    grid-column: span 4 / span 4;
+    padding-bottom: 0.75rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .skills__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .skills__col {
+    padding-block: 3rem;
+  }
+  .skills__col + .skills__col {
+    border-top-width: 0;
+    border-left-width: 1px;
+  }
+}

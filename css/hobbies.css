@@ -1,0 +1,395 @@
+/* ──────────────────────────────────────────────────────────────
+   Chapter 06 — A life in fragments.
+   A dark graph-paper sheet with a hand-placed photo collage,
+   followed by the resume.
+   ────────────────────────────────────────────────────────────── */
+
+.lab {
+  position: relative;
+  z-index: 5;
+  padding-bottom: 14vh;
+}
+
+/* The notebook sheet floating on the pond */
+.lab__sheet {
+  position: relative;
+  margin-inline: clamp(10px, 2.6vw, 44px);
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 3px;
+  background-color: var(--ink);
+  color: var(--ivory);
+  box-shadow:
+    0 0 0 1px rgba(145, 198, 90, 0.08),
+    0 40px 100px -30px rgba(0, 0, 0, 0.8);
+  transform-origin: 50% 0%;
+}
+
+.lab__inner {
+  position: relative;
+  padding: clamp(28px, 4vw, 56px) clamp(20px, 5.5vw, 96px) clamp(60px, 10vw, 160px);
+}
+
+/* Washi tape holding things to the page */
+.lab__tape {
+  position: absolute;
+  z-index: 3;
+  width: 70px;
+  height: 20px;
+  background: rgba(232, 225, 207, 0.62);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(1px);
+}
+.lab__tape::before,
+.lab__tape::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: inherit;
+  /* torn, perforated ends */
+  mask: radial-gradient(circle at 50% 50%, #000 1.2px, transparent 1.4px) 0 0 / 4px 4px;
+}
+.lab__tape::before {
+  left: -3px;
+}
+.lab__tape::after {
+  right: -3px;
+}
+
+/* ── Heading + taped note ─────────────────────────────────────── */
+.lab__intro {
+  margin-top: clamp(40px, 6vw, 96px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: end;
+  gap: 2rem;
+}
+
+.lab__kicker {
+  color: var(--lime);
+}
+
+.lab__title {
+  margin-top: 1.25rem;
+  font-size: clamp(56px, 8.6vw, 180px);
+  color: var(--ivory);
+}
+
+.lab__note-wrap {
+  position: relative;
+}
+
+.lab__note {
+  position: relative;
+  max-width: 320px;
+  rotate: 2deg;
+  padding: 1.75rem 1.5rem 1.5rem;
+  background: var(--ivory);
+  color: var(--ink);
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.7);
+}
+
+.lab__tape--note {
+  top: -0.5rem;
+  left: 50%;
+  translate: -50% 0;
+  rotate: -3deg;
+}
+
+.lab__note-lines {
+  position: absolute;
+  inset: 0;
+  opacity: 0.7;
+}
+
+.lab__note-text {
+  position: relative;
+  font-size: 25px;
+  line-height: 1.1;
+}
+
+/* ── The collage ──────────────────────────────────────────────── */
+.lab__grid {
+  margin-top: clamp(56px, 8vw, 120px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: 1.5rem;
+  row-gap: 4rem;
+}
+
+/* Each photo: its tilt, shape and crop */
+.lab__item--1 {
+  --rot: -2deg;
+  --aspect: 4 / 3;
+  --focus: 50% 45%;
+}
+.lab__item--2 {
+  --rot: 2.5deg;
+  --aspect: 3 / 4;
+  --focus: 62% 55%;
+}
+.lab__item--3 {
+  --rot: 3deg;
+  --aspect: 4 / 3;
+  --focus: 40% 50%;
+}
+.lab__item--4 {
+  --rot: -2.5deg;
+  --aspect: 1 / 1;
+  --focus: 50% 40%;
+}
+.lab__item--5 {
+  --rot: 2deg;
+  --aspect: 1 / 1;
+  --focus: 50% 40%;
+}
+.lab__item--6 {
+  --rot: -1.5deg;
+  --aspect: 3 / 4;
+  --focus: 50% 50%;
+}
+
+.lab__card {
+  display: block;
+}
+
+.lab__figure {
+  position: relative;
+  rotate: var(--rot);
+  transition: rotate 0.7s var(--ease-soft);
+}
+
+.lab__tape--photo {
+  top: -0.5rem;
+  left: 1.5rem;
+  rotate: -6deg;
+}
+
+.lab__mount {
+  padding: 0.5rem;
+  background: var(--paper);
+  box-shadow: 0 24px 50px -24px rgba(0, 0, 0, 0.85);
+}
+
+.lab__frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: var(--aspect);
+}
+
+.lab__zoom {
+  width: 100%;
+  height: 100%;
+  transition: scale 1.4s var(--ease-soft);
+}
+
+.lab__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--focus);
+}
+
+.lab__number {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  padding: 0.125rem 0.375rem;
+  background: rgb(var(--ink-rgb) / 0.7);
+  color: rgb(var(--ivory-rgb) / 0.8);
+}
+
+.lab__caption {
+  margin-top: 1rem;
+  padding-inline: 0.25rem;
+}
+
+.lab__fragment {
+  color: rgb(var(--lime-rgb) / 0.9);
+}
+
+.lab__name {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: clamp(26px, 2.2vw, 34px);
+  text-transform: uppercase;
+  color: var(--ivory);
+}
+
+.lab__line {
+  margin-top: 0.25rem;
+  font-size: 22px;
+  line-height: 1.1;
+  color: var(--sage);
+}
+
+/* Hover: the photo straightens and leans in */
+@media (hover: hover) {
+  .lab__card:hover .lab__figure {
+    rotate: 0deg;
+  }
+  .lab__card:hover .lab__zoom {
+    scale: 1.06;
+  }
+}
+
+/* The margin note beside the last photo (wide screens only) */
+.lab__aside {
+  display: none;
+  align-self: center;
+}
+
+.lab__aside-text {
+  rotate: -3deg;
+  font-size: 30px;
+  line-height: 1.05;
+  color: var(--sage);
+}
+
+.lab__aside-arrow {
+  margin-top: 0.75rem;
+  width: 6rem;
+  height: 3rem;
+  rotate: 160deg;
+  color: var(--botanical);
+}
+
+/* ── The resume ───────────────────────────────────────────────── */
+.lab__resume {
+  position: relative;
+  margin-top: clamp(90px, 12vw, 200px);
+  scroll-margin-top: 6rem;
+}
+
+.lab__resume-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  column-gap: 2.5rem;
+  row-gap: 1.5rem;
+  padding-top: clamp(36px, 5vw, 72px);
+  border-top: 1px solid rgb(var(--ivory-rgb) / 0.15);
+}
+
+.lab__resume-title {
+  margin-top: 1rem;
+  font-size: clamp(56px, 8vw, 150px);
+  color: var(--ivory);
+}
+
+.lab__download {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding-bottom: 0.5rem;
+}
+
+.lab__download-btn {
+  color: var(--ivory);
+  --fill: var(--lime);
+  --hover-ink: var(--ink);
+}
+
+.lab__download-note {
+  font-size: 20px;
+  line-height: 1;
+  color: var(--sage);
+}
+
+.lab__sheet-wrap {
+  position: relative;
+  max-width: 900px;
+  margin: clamp(40px, 5vw, 72px) auto 0;
+}
+
+.lab__tape--sheet-left,
+.lab__tape--sheet-right {
+  top: -0.75rem;
+  z-index: 10;
+}
+.lab__tape--sheet-left {
+  left: 12%;
+  rotate: -6deg;
+}
+.lab__tape--sheet-right {
+  right: 12%;
+  rotate: 6deg;
+}
+
+.lab__resume-sheet {
+  position: relative;
+  box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.9);
+}
+
+/* ── Breakpoints ──────────────────────────────────────────────── */
+@media (min-width: 640px) {
+  .lab__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .lab__download {
+    align-items: flex-end;
+  }
+  .lab__resume-sheet {
+    rotate: -0.6deg;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lab__intro {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .lab__heading {
+    grid-column: span 8 / span 8;
+  }
+  .lab__note-wrap {
+    grid-column: span 4 / span 4;
+    padding-bottom: 1.5rem;
+  }
+
+  /* 12-column collage, placed by hand */
+  .lab__grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    row-gap: 1.5rem;
+  }
+  .lab__item--1 {
+    grid-column: 1 / span 6;
+    grid-row: 1;
+  }
+  .lab__item--2 {
+    grid-column: 8 / span 4;
+    grid-row: 1;
+    margin-top: 12vh;
+  }
+  .lab__item--3 {
+    grid-column: 1 / span 4;
+    grid-row: 2;
+    margin-top: 6vh;
+  }
+  .lab__item--4 {
+    grid-column: 6 / span 3;
+    grid-row: 2;
+    margin-top: 16vh;
+  }
+  .lab__item--5 {
+    grid-column: 10 / span 3;
+    grid-row: 2;
+    margin-top: 4vh;
+  }
+  .lab__item--6 {
+    grid-column: 4 / span 4;
+    grid-row: 3;
+    margin-top: 6vh;
+  }
+  .lab__aside {
+    display: block;
+    grid-column: 9 / span 3;
+    grid-row: 3;
+    margin-top: 10vh;
+  }
+}

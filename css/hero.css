@@ -1,0 +1,292 @@
+/* ──────────────────────────────────────────────────────────────
+   Water + Chapter 01 · The opening
+   ────────────────────────────────────────────────────────────── */
+
+/* Fixed WebGL pond behind every section (CSS gradient if WebGL fails) */
+.water {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+.water__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── the section ── */
+.hero {
+  position: relative;
+  z-index: 1;
+  height: 100svh;
+  overflow: hidden;
+}
+
+/* ── the pond: koi beneath, pads on the surface ── */
+.pond {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+.pond__depths {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.32;
+  filter: blur(0.6px);
+}
+.pond__koi {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.pond__surface {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+.pond__surface--front {
+  z-index: 4;
+}
+
+.pond-pad {
+  position: absolute;
+  width: var(--pad);
+  height: var(--pad);
+}
+/* small pads only join on wider screens — the water should breathe */
+.pond-pad--wide {
+  display: none;
+}
+@media (min-width: 768px) {
+  .pond-pad--wide {
+    display: block;
+  }
+}
+
+/* placement, sparse on purpose */
+.pond-pad--1 {
+  left: -5%;
+  top: 13%;
+  --pad: clamp(150px, 21vw, 320px);
+}
+.pond-pad--2 {
+  right: 7%;
+  top: 17%;
+  --pad: clamp(70px, 9vw, 150px);
+}
+.pond-pad--3 {
+  right: -4%;
+  bottom: 17%;
+  --pad: clamp(160px, 19vw, 290px);
+}
+.pond-pad--4 {
+  left: 21%;
+  bottom: 19%;
+  --pad: clamp(52px, 5.5vw, 92px);
+}
+.pond-pad--5 {
+  left: 57%;
+  top: 9%;
+  --pad: clamp(40px, 4vw, 64px);
+}
+.pond-pad--6 {
+  left: -7%;
+  bottom: -9%;
+  --pad: clamp(160px, 18vw, 260px);
+}
+.pond-pad--7 {
+  left: 66%;
+  bottom: -6%;
+  --pad: clamp(70px, 7vw, 120px);
+}
+
+/* pointer parallax layer, then a slow drift layer (both moved by GSAP) */
+.pad-par {
+  width: 100%;
+  height: 100%;
+}
+.pad-drift {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+.pond-pad__lily {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.pond-ring--late {
+  animation-delay: -3.5s;
+}
+
+/* ── content ── */
+.hero__content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  padding: calc(var(--nav-h) + 12px) var(--gutter) 1.5rem;
+}
+
+.hero__rail {
+  display: flex;
+  justify-content: space-between;
+}
+.hero__rail--top {
+  align-items: flex-start;
+  color: var(--sage);
+}
+.hero__rail--bottom {
+  align-items: flex-end;
+  gap: 1.5rem;
+}
+.hero__dim {
+  opacity: 0.6;
+}
+.hero__edition {
+  display: none;
+  text-align: right;
+}
+
+/* the name, rising out of the water */
+.hero__center {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.hero__title-wrap {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+.hero__title {
+  --sx-o: 50% 50%;
+  display: flex;
+  width: max-content;
+  flex-shrink: 0;
+  align-items: center;
+  column-gap: 0.2em;
+  white-space: nowrap;
+  text-align: center;
+  color: var(--ivory);
+  text-shadow: 0 20px 60px rgba(2, 12, 9, 0.35);
+}
+/* first name over surname */
+.hero__title[data-stacked='true'] {
+  flex-direction: column;
+  row-gap: 0.04em;
+}
+.hero__word {
+  display: flex;
+}
+/* each letter rises inside its own little mask */
+.hero__letter {
+  display: inline-block;
+  overflow: clip;
+  padding: 0.02em 0 0.05em;
+  vertical-align: top;
+}
+.hero__char {
+  display: inline-block;
+}
+
+.hero__statement {
+  margin-top: clamp(10px, 2vh, 28px);
+  max-width: 22ch;
+  text-wrap: balance;
+  text-align: center;
+  font-size: clamp(22px, 3.1vw, 44px);
+  line-height: 1.12;
+  color: rgb(var(--ivory-rgb) / 0.9);
+}
+
+/* lower-left note */
+.hero__intro {
+  max-width: 300px;
+}
+.hero__now {
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--lime);
+}
+.hero__now-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lime);
+}
+.hero__intro-text {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgb(var(--ivory-rgb) / 0.8);
+}
+
+.hero__themes {
+  display: none;
+  text-align: center;
+  color: var(--sage);
+}
+.hero__sep {
+  margin: 0 0.9em;
+  opacity: 0.4;
+}
+
+/* "Scroll" cue */
+.hero__scroll {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--sage);
+}
+.hero__scroll-label {
+  writing-mode: vertical-rl;
+  transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hero__scroll:hover .hero__scroll-label {
+  color: var(--ivory);
+}
+.hero__scroll-track {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 3.5rem;
+  overflow: hidden;
+  background: rgb(var(--sage-rgb) / 0.25);
+}
+.hero__scroll-dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: 1px;
+  height: 1.25rem;
+  background: var(--lime);
+}
+
+@media (min-width: 640px) {
+  .hero__content {
+    padding-bottom: 2rem;
+  }
+  .hero__edition {
+    display: block;
+  }
+  .hero__statement {
+    max-width: 32ch;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero__themes {
+    display: block;
+  }
+}

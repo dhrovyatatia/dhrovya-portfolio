@@ -1,0 +1,214 @@
+/* ──────────────────────────────────────────────────────────────
+   Chapter III · The journal — a paper page holding the 3D book.
+   The two-page book needs a wide *and* tall screen; everywhere
+   else a single-page journal takes its place.
+   ────────────────────────────────────────────────────────────── */
+
+/* ── Section frame */
+.journal {
+  position: relative;
+  z-index: 5;
+}
+.journal__frame {
+  padding-bottom: 10vh;
+}
+.journal__page {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ghost title behind the book */
+.journal__ghost {
+  --sx-o: 50% 50%;
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  translate: -50% -50%;
+  user-select: none;
+  white-space: nowrap;
+  font-size: clamp(110px, 15vw, 300px);
+  color: rgb(var(--forest-rgb) / 0.055);
+}
+
+.journal__folio {
+  position: relative;
+  padding: clamp(20px, 2.6vw, 36px) clamp(20px, 4vw, 64px) 0;
+}
+
+.journal__body {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 0 clamp(20px, 4vw, 64px);
+}
+
+/* ── Side notes (only on very wide screens) */
+.journal__side {
+  pointer-events: none;
+  position: absolute;
+  top: 8%;
+  z-index: 10;
+  display: none;
+}
+.journal__side--left {
+  left: clamp(20px, 4vw, 64px);
+  width: 230px;
+}
+.journal__side--right {
+  right: clamp(20px, 4vw, 64px);
+  width: 180px;
+  text-align: right;
+}
+.journal__side-title {
+  font-size: 46px;
+  color: var(--forest);
+}
+.journal__side-text {
+  margin-top: 1rem;
+  max-width: 200px;
+  font-size: 19px;
+  line-height: 1.375;
+  color: rgb(var(--ink-rgb) / 0.7);
+}
+.journal__side-kicker {
+  color: var(--botanical);
+}
+.journal__side-number {
+  --sx-o: 100% 50%;
+  margin-top: 0.5rem;
+  font-size: 110px;
+  color: var(--forest);
+}
+.journal__side-total {
+  margin-top: 0.5rem;
+  color: rgb(var(--ink-rgb) / 0.55);
+}
+
+/* ── Heading for the single-page journal */
+.journal__intro {
+  padding: 2.5rem 0 2rem;
+}
+.journal__title {
+  font-size: clamp(52px, 14vw, 110px);
+  color: var(--forest);
+}
+.journal__lede {
+  margin-top: 0.75rem;
+  max-width: 30ch;
+  font-size: 19px;
+  line-height: 1.375;
+  color: rgb(var(--ink-rgb) / 0.7);
+}
+
+/* ── Where the book (or the single-page journal) sits */
+.journal__stage {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 1.5rem;
+}
+.journal__stage .book-stage {
+  display: none;
+}
+
+/* ── Controls: arrows, caption, page dots */
+.journal__controls {
+  position: relative;
+  margin: 0 auto;
+  display: flex;
+  width: 100%;
+  max-width: 980px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: clamp(16px, 2.4vw, 28px);
+  color: var(--forest);
+}
+.journal__center {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+.journal__caption {
+  display: flex;
+  min-height: 38px;
+  max-width: 100%;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.journal__caption-meta {
+  color: var(--botanical);
+}
+.journal__caption-title {
+  margin-top: 0.125rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 19px;
+  color: rgb(var(--ink-rgb) / 0.8);
+}
+.journal__dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.journal__dot {
+  display: grid;
+  height: 1.5rem;
+  place-items: center;
+  padding: 0 0.125rem;
+}
+.journal__dot span {
+  display: block;
+  height: 5px;
+  width: 5px;
+  border-radius: 999px;
+  background: rgb(var(--forest-rgb) / 0.25);
+  transition: all 0.7s var(--ease-soft);
+}
+.journal__dot:hover span {
+  background: rgb(var(--forest-rgb) / 0.6);
+}
+.journal__dot[aria-selected='true'] span {
+  width: 1.75rem;
+  background: var(--forest);
+}
+
+/* ── Wide & tall screens: the page is pinned and holds the two-page book */
+@media (min-width: 900px) and (min-height: 560px) {
+  .journal__frame {
+    display: flex;
+    height: 100svh;
+    flex-direction: column;
+    padding: 0.75rem 0;
+  }
+  .journal__page {
+    height: 100%;
+  }
+  .journal__intro,
+  .journal__stage .mj-stage {
+    display: none;
+  }
+  .journal__stage {
+    padding-bottom: 0;
+  }
+  .journal__stage .book-stage {
+    display: grid;
+  }
+}
+
+@media (min-width: 1760px) and (min-height: 560px) {
+  .journal__side {
+    display: block;
+  }
+}
